@@ -1,18 +1,17 @@
 
 
 
-
+/*
 const noti = new Notification()
 noti.title = "Yo"
 noti.subtitle = "Sub"
 noti.body = "This is some test text!"
 
-// 10 seconds after 
-// Timer.schedule(3 * 1000, false, () => {
-//     noti.schedule()
-// })
-// 
-// eval("Timer.schedule(3 * 1000, false, () => {noti.schedule()})")
+Timer.schedule(3 * 1000, false, () => {
+    noti.schedule()
+})
+
+eval("Timer.schedule(3 * 1000, false, () => {noti.schedule()})")*/
 let clockedIn = false
 let onDelivery = false
 const al = new Alert()
@@ -20,8 +19,7 @@ al.title =  "DELIVERY"
 al.addAction("3")
 al.addAction("2")
 al.addAction("1")
-// 
-// log(await al.presentAlert())
+log(await al.presentAlert())
 
 function displayAlert(path) {
   let alert = new Alert()
@@ -79,4 +77,4 @@ function makeNotification(args) {
   
 }
 // textCustomer(3219992453, 1)
-displayAlert()
+// displayAlert()
