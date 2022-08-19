@@ -21,6 +21,7 @@ al.addAction("2")
 al.addAction("1")
 log(await al.presentAlert())
 
+/*
 function displayAlert(path) {
   let alert = new Alert()
   alert.title = "DELIVERY TRACKER"
@@ -78,3 +79,4 @@ function makeNotification(args) {
 }
 // textCustomer(3219992453, 1)
 // displayAlert()
+*/
