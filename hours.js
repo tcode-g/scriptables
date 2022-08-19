@@ -33,9 +33,9 @@ function displayAlert(path) {
       if (choice == 0) {
         clockedIn = true
       }
-    }
+    })
   } else {
-    if (onDelivery == true} {
+    if (onDelivery == true) {
       alert.addAction("Text Customer")
       alert.addAction("Return")
       alert.addDestructiveAction("quit")
@@ -57,7 +57,7 @@ function displayAlert(path) {
         } else if (choice == 1) {
           
         }
-      }
+      })
     } else {
       
     }
