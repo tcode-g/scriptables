@@ -20,6 +20,8 @@ al.addAction("1")
 log(2)
 log(await al.presentAlert())
 */
+
+// have to use file manager to be able to get these values
 let clockedIn = false
 let onDelivery = false
 
