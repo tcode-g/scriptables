@@ -19,6 +19,7 @@ al.title =  "DELIVERY"
 al.addAction("3")
 al.addAction("2")
 al.addAction("1")
+log(2)
 log(await al.presentAlert())
 
 /*
