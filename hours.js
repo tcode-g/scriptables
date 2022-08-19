@@ -11,9 +11,7 @@ Timer.schedule(3 * 1000, false, () => {
     noti.schedule()
 })
 
-eval("Timer.schedule(3 * 1000, false, () => {noti.schedule()})")*/
-let clockedIn = false
-let onDelivery = false
+eval("Timer.schedule(3 * 1000, false, () => {noti.schedule()})")
 const al = new Alert()
 al.title =  "DELIVERY"
 al.addAction("3")
@@ -21,6 +19,10 @@ al.addAction("2")
 al.addAction("1")
 log(2)
 log(await al.presentAlert())
+*/
+let clockedIn = false
+let onDelivery = false
+
 
 
 function displayAlert(path) {
@@ -79,4 +81,4 @@ function makeNotification(args) {
   
 }
 // textCustomer(3219992453, 1)
-// displayAlert()
+displayAlert()
