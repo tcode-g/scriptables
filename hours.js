@@ -24,12 +24,18 @@ log(await al.presentAlert())
 // have to use file manager to be able to get these values
 const Files = FileManager.local()
 const trackerFile = Files.joinPath(Files.documentsDirectory(), "tracker.json")
-let trackingData = {}
+let data = {
+  clockedIn: false,
+  onDelivery: false,
+  pastEvents: {
+    // Date: {In: 00, Out: 11, }
+  }
+}
 let clockedIn = false
 let onDelivery = false
 if (!Files.fileExists(trackerFile)) {
   log("File exists")
-  Files.writeString(trackerFile, JSON.stringify(trackingData))
+  Files.writeString(trackerFile, JSON.stringify(data))
 } else {
   log("File doesn't exist")
   log(Files.readString(trackerFile))
