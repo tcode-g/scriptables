@@ -22,8 +22,16 @@ log(await al.presentAlert())
 */
 
 // have to use file manager to be able to get these values
+const Files = FileManager.local()
+const trackerFile = Files.joinPath(Files.documentsDirectory(), "tracker.json")
+let trackingData = {}
 let clockedIn = false
 let onDelivery = false
+if (!Files.fileExists(trackerFile)) {
+  Files.writeString(trackerFile, JSON.stringify(trackingData))
+} else {
+  log(Files.readString(trackerFile))
+}
 
 
 
