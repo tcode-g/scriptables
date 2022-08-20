@@ -28,8 +28,10 @@ let trackingData = {}
 let clockedIn = false
 let onDelivery = false
 if (!Files.fileExists(trackerFile)) {
+  log("File exists")
   Files.writeString(trackerFile, JSON.stringify(trackingData))
 } else {
+  log("File doesn't exist")
   log(Files.readString(trackerFile))
 }
 
