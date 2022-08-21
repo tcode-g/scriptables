@@ -23,23 +23,33 @@ log(await al.presentAlert())
 
 // have to use file manager to be able to get these values
 const Files = FileManager.local()
-const trackerFile = Files.joinPath(Files.documentsDirectory(), "tracker.json")
+const trackerFile = Files.joinPath(Files.documentsDirectory(), "tracker.txt")
+const today = new Date()
+let theDate = [today.getMonth()+1, today.getDate(), today.getFullYear()].join("/")
 let data = {
   clockedIn: false,
   onDelivery: false,
-  pastEvents: {
-    // Date: {In: 00, Out: 11, }
+  events: {
+    /*
+    Date: {
+      In: 00, Out: 11, times: [], 
+      compiled: {driving: 1.25, inshop: 7.75, dCash: 1.25 * 6.49, shopCash: 7.75 * 10
+      }
+      */
   }
 }
-let clockedIn = false
-let onDelivery = false
 if (!Files.fileExists(trackerFile)) {
-  log("File exists")
+  log("File doesn't exist")
   Files.writeString(trackerFile, JSON.stringify(data))
 } else {
-  log("File doesn't exist")
-  log(Files.readString(trackerFile))
+  log("File exists")
+  let stringData = Files.readString(trackerFile)
+  if (data.events)
+  data = JSON.parse(stringData)
+  log("Parsed Data:", data)
 }
+let clockedIn = data.clockedIn
+let onDelivery = data.onDelivery
 
 
 
@@ -75,7 +85,7 @@ function displayAlert(path) {
             }
           })
         } else if (choice == 1) {
-          
+          onDelivery = false
         }
       })
     } else {
@@ -100,3 +110,6 @@ function makeNotification(args) {
 }
 // textCustomer(3219992453, 1)
 displayAlert()
+
+data.clockedIn = clockedIn
+data.onDelivery = onDelivery
