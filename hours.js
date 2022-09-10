@@ -33,7 +33,7 @@ let data = {
     /*
     Date: {
       In: 00, Out: 11, times: [], 
-      compiled: {driving: 1.25, inshop: 7.75, dCash: 1.25 * 6.49, shopCash: 7.75 * 10
+      summary: {driving: 1.25, inshop: 7.75, dCash: 1.25 * 6.49, shopCash: 7.75 * 10
       }
       */
   }
@@ -49,11 +49,14 @@ if (!Files.fileExists(trackerFile)) {
   log("Parsed Data:", data)
 }
 if (!(theDate in data.events)) {	
-  data.events[theDate] = {	
-    In: 0,	
-    Out: 0,	
-    times: [],	
-    compiled: {driving: 0, inshop: 0, dCash: 0, shopCash: 0}	
+  data.events[theDate] = {
+    clockedIn: 0,
+    clockedOut: 0,
+    times: {
+      In: [],
+      Out: []
+    },
+    summary: {driving: 0, inshop: 0, dCash: 0, shopCash: 0, tips:0}	
   }	
 }
 let clockedIn = data.clockedIn
@@ -70,7 +73,7 @@ function displayAlert(path) {
     alert.presentAlert().then((choice) => {
       if (choice == 0) {
         clockedIn = true
-        data.events[theDate].In = today.getTime()
+        data.events[theDate].clockedIn = today.getTime()
       }
     })
   } else {
@@ -94,7 +97,7 @@ function displayAlert(path) {
             } else if (choice == 1) {
               textCustomer(alert2.textFieldValue(0), 2)
             }
-            switch (chioce) {
+            switch (choice) {
               case 0:
               case 1:
                 textCustomer(alert2.textFieldValue(0), choice+1)
@@ -106,12 +109,33 @@ function displayAlert(path) {
             }
           })
         } else if (choice == 1) {
+          // stopping delivery
           onDelivery = false
-          data.events[theDate].times = true
+          data.events[theDate].times.In.append(today.getTime())
         }
       })
     } else {
-      
+      // clocked in, not on delivery
+      alert.addAction("start delivery")
+      alert.addAction("clock out")
+      alert.presentAlert().then((choice) => {
+        if (choice == 0) {
+          onDelivery = true
+          data.events[theDate].times.Out.append(today.getTime())
+        } else if (choice == 1) {
+          clockedIn = false
+          onDelivery = false
+          data.events[theDate].clockedOut = today.getTime()
+          for (let i = 0; i < data.events[theDate].Out.length-2; i++) {
+            let timeInShop = ((i == 0) ? data.events[theDate].clockedIn : data.events[theDate].In[i]) - data.events[theDate].Out[i+1]
+            let timeDelivering = data.events[theDate].Out[i] - data.events[theDate].In[i]
+            data.events[theDate].summary.driving += (timeDelivering / 3600000)
+            data.events[theDate].summary.inshop += timeInShop / 3600000
+          }
+          data.events[theDate].summary.dCash = data.events[theDate].summary.driving * 6.49
+          data.events[theDate].summary.shopCash = data.events[theDate].summary.inshop * 10
+        }
+      })
     }
   }
 }
