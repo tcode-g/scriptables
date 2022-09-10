@@ -118,6 +118,7 @@ function displayAlert(path) {
       // clocked in, not on delivery
       alert.addAction("start delivery")
       alert.addAction("clock out")
+      alert.addDestructiveAction("quit")
       alert.presentAlert().then((choice) => {
         if (choice == 0) {
           onDelivery = true
@@ -161,5 +162,5 @@ displayAlert()
 
 data.clockedIn = clockedIn
 data.onDelivery = onDelivery
-
+log(data)
 Files.writeString(trackerFile, JSON.stringify(data))
