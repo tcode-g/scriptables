@@ -61,6 +61,7 @@ if (!(theDate in data.events)) {
 }
 let clockedIn = data.clockedIn
 let onDelivery = data.onDelivery
+let eventsToday = data.events[theDate]
 
 
 
@@ -122,19 +123,20 @@ function displayAlert(path) {
       alert.presentAlert().then((choice) => {
         if (choice == 0) {
           onDelivery = true
-          data.events[theDate].times.Out.append(today.getTime())
+          eventsToday.times.Out.append(today.getTime())
         } else if (choice == 1) {
           clockedIn = false
           onDelivery = false
-          data.events[theDate].clockedOut = today.getTime()
+          eventsToday.clockedOut = today.getTime()
           for (let i = 0; i < data.events[theDate].Out.length-2; i++) {
             let timeInShop = ((i == 0) ? data.events[theDate].clockedIn : data.events[theDate].In[i]) - data.events[theDate].Out[i+1]
             let timeDelivering = data.events[theDate].Out[i] - data.events[theDate].In[i]
-            data.events[theDate].summary.driving += (timeDelivering / 3600000)
-            data.events[theDate].summary.inshop += timeInShop / 3600000
+            eventsToday.summary.driving += (timeDelivering / 3600000)
+            eventsToday.summary.inshop += timeInShop / 3600000
+            log(timeInShop, timeDelivering)
           }
-          data.events[theDate].summary.dCash = data.events[theDate].summary.driving * 6.49
-          data.events[theDate].summary.shopCash = data.events[theDate].summary.inshop * 10
+          eventsToday.summary.dCash = data.events[theDate].summary.driving * 6.49
+          eventsToday.summary.shopCash = data.events[theDate].summary.inshop * 10
         }
       })
     }
