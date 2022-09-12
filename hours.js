@@ -158,9 +158,10 @@ function makeNotification(args) {
   
 }
 // textCustomer(3219992453, 1)
-displayAlert()
+await displayAlert()
 
 data.clockedIn = clockedIn
 data.onDelivery = onDelivery
+log(clockedIn)
 log(data)
 Files.writeString(trackerFile, JSON.stringify(data))
