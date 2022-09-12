@@ -65,80 +65,78 @@ let eventsToday = data.events[theDate]
 
 
 
-function displayAlert(path) {
+async function displayAlert(path) {
   let alert = new Alert()
   alert.title = "DELIVERY TRACKER"
   if (clockedIn == false) {
     alert.addAction("clock in")
     alert.addDestructiveAction("quit")
-    alert.presentAlert().then((choice) => {
-      if (choice == 0) {
-        clockedIn = true
-        data.events[theDate].clockedIn = today.getTime()
-      }
-    })
+    let choice = await alert.presentAlert()
+    if (choice == 0) {
+      clockedIn = true
+      data.events[theDate].clockedIn = today.getTime()
+      log("clocking in")
+    }
   } else {
     if (onDelivery == true) {
       alert.addAction("Text Customer")
       alert.addAction("Add Tip")
       alert.addAction("Delivery Done")
       alert.addDestructiveAction("quit")
-      alert.presentAlert().then((choice) => {
-        if (choice == 0) {
-          let alert2 = new Alert()
-          alert2.title = "Customer Contact"
-          alert2.addTextField("Number", "Phone")
-          alert2.addAction("Lobby")
-          alert2.addAction("Front Door")  
-          alert2.addAction("Other")
-          alert2.addDestructiveAction("quit")
-          alert2.presentAlert().then((choice) => {
-            if (choice == 0) {
-              textCustomer(alert2.textFieldValue(0), 1)
-            } else if (choice == 1) {
-              textCustomer(alert2.textFieldValue(0), 2)
-            }
-            switch (choice) {
-              case 0:
-              case 1:
-                textCustomer(alert2.textFieldValue(0), choice+1)
-                break;
-                
-              default:
-                textCustomer(alert2.textFieldValue(0))
-                break;
-            }
-          })
-        } else if (choice == 1) {
-          // stopping delivery
-          onDelivery = false
-          data.events[theDate].times.In.append(today.getTime())
-        }
-      })
+      let choice = await alert.presentAlert()
+      if (choice == 0) {
+        let alert2 = new Alert()
+        alert2.title = "Customer Contact"
+        alert2.addTextField("Number", "Phone")
+        alert2.addAction("Lobby")
+        alert2.addAction("Front Door")  
+        alert2.addAction("Other")
+        alert2.addDestructiveAction("quit")
+        alert2.presentAlert().then((choice) => {
+          if (choice == 0) {
+            textCustomer(alert2.textFieldValue(0), 1)
+          } else if (choice == 1) {
+            textCustomer(alert2.textFieldValue(0), 2)
+          }
+          switch (choice) {
+            case 0:
+            case 1:
+              textCustomer(alert2.textFieldValue(0), choice+1)
+              break;
+              
+            default:
+              textCustomer(alert2.textFieldValue(0))
+              break;
+          }
+        })
+      } else if (choice == 1) {
+        // stopping delivery
+        onDelivery = false
+        data.events[theDate].times.In.append(today.getTime())
+      }
     } else {
       // clocked in, not on delivery
       alert.addAction("start delivery")
       alert.addAction("clock out")
       alert.addDestructiveAction("quit")
-      alert.presentAlert().then((choice) => {
-        if (choice == 0) {
-          onDelivery = true
-          eventsToday.times.Out.append(today.getTime())
-        } else if (choice == 1) {
-          clockedIn = false
-          onDelivery = false
-          eventsToday.clockedOut = today.getTime()
-          for (let i = 0; i < data.events[theDate].Out.length-2; i++) {
-            let timeInShop = ((i == 0) ? data.events[theDate].clockedIn : data.events[theDate].In[i]) - data.events[theDate].Out[i+1]
-            let timeDelivering = data.events[theDate].Out[i] - data.events[theDate].In[i]
-            eventsToday.summary.driving += (timeDelivering / 3600000)
-            eventsToday.summary.inshop += timeInShop / 3600000
-            log(timeInShop, timeDelivering)
-          }
-          eventsToday.summary.dCash = data.events[theDate].summary.driving * 6.49
-          eventsToday.summary.shopCash = data.events[theDate].summary.inshop * 10
+      let choice = await alert.presentAlert()
+      if (choice == 0) {
+        onDelivery = true
+        eventsToday.times.Out.append(today.getTime())
+      } else if (choice == 1) {
+        clockedIn = false
+        onDelivery = false
+        eventsToday.clockedOut = today.getTime()
+        for (let i = 0; i < data.events[theDate].Out.length-2; i++) {
+          let timeInShop = ((i == 0) ? data.events[theDate].clockedIn : data.events[theDate].In[i]) - data.events[theDate].Out[i+1]
+          let timeDelivering = data.events[theDate].Out[i] - data.events[theDate].In[i]
+          eventsToday.summary.driving += (timeDelivering / 3600000)
+          eventsToday.summary.inshop += timeInShop / 3600000
+          log(timeInShop, timeDelivering)
         }
-      })
+        eventsToday.summary.dCash = data.events[theDate].summary.driving * 6.49
+        eventsToday.summary.shopCash = data.events[theDate].summary.inshop * 10
+      }
     }
   }
 }
