@@ -1,7 +1,4 @@
 
-const distAPIKEY = "AIzaSyByHczbqkvNiLPUVuqFLE26j3DMehPZqeg"
-"https://maps.googleapis.com/maps/api/distancematrix/json?destinations={}&origins={}&units=imperial&key=AIzaSyByHczbqkvNiLPUVuqFLE26j3DMehPZqeg"
-
 /*
 const noti = new Notification()
 noti.title = "Yo"
